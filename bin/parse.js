@@ -92,15 +92,19 @@ try {
 	if(result) {
 		showSource();
 
-		result.forEach((line, number) => {
-			if(!line) {
-				console.log('NOT LINE', line)
-				process.exit()
-			} else {
-				console.log(number.toString().blue, JSON.stringify((line || ''), null, "\t").yellow)
-				console.log();
-			}
-		})
+		result
+		//	.filter(i => i.caption.descr && typeof i.caption.descr !== 'string')
+			.map(i => i.sets)
+			.forEach((line, number) => {
+				if(!line) {
+					console.log('NOT LINE', line)
+					process.exit()
+				} else {
+					console.log(number.toString().blue, JSON.stringify((line || ''), null, "\t").yellow)
+					console.log();
+				}
+			})
+		;
 	}
 
 } catch(e) {

@@ -27,6 +27,13 @@
 			ln: location().start.line
 		}]
 	}
+
+	function _prepareCaption(caption) {
+		if(caption.descr instanceof Array) {
+			caption.descr = caption.descr.join(' ');
+		}
+		return caption;
+	}
 }
 
 start =  result:TRAINING+ {
@@ -34,8 +41,11 @@ start =  result:TRAINING+ {
 }
 
 TRAINING = caption:(CAPTION / REVERSE_CAPTION) NL sets:SET+ (SPACE / NL)* {
+	_prepareCaption(caption);
+
 	return {
-		caption,
+		weekday: caption.weekday,
+		descr: caption.descr,
 		sets,
 		source:text()
 	}
@@ -48,7 +58,7 @@ SET = number:([0-9]) ")" result:EXERCISE tail:(NL? "," text2:EXERCISE)* NL {
 		result += tail.join('');
 	}
 
-	return { number, result };
+	return result;
 }
 
 EXERCISE = !([0-9] ")") TEXT {
