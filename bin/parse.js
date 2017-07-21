@@ -94,12 +94,91 @@ try {
 	if(result) {
 	//	showSource();
 
+		let exercises = {};
+
 		result
-//			.filter(i => i.descr)
-//			.map(i => i.descr)
-//			.sort()
-//			.map(i => i.sets)
-//		.slice(157,158)
+			.map((line, number) => {
+				let isDropset;
+				let mode;
+				// режим тренировки
+				if(line.descr) {
+					isDropset = line.descr.toLowerCase().match(/дроп сет/) !== null;
+					mode = line.descr.match(/\d+[хx]\d+/g);
+				}
+
+				// уплощение сетов
+				let sets = [];
+				line.sets.forEach((set) => {
+					switch(true) {
+						case set.hasOwnProperty('circle'):
+							set.circle.forEach(subset => {
+								subset.type = 'circle';
+								sets.push(subset);
+							});
+							break;
+
+						case set.hasOwnProperty('triset'):
+							set.triset.forEach(subset => {
+								subset.type = 'triset';
+								sets.push(subset);
+							});
+							break;
+
+						case set.hasOwnProperty('superset'):
+							set.superset.forEach(subset => {
+								subset.type = 'superset';
+								sets.push(subset);
+							});
+							break;
+
+						default:
+							set.type = 'simple';
+							sets.push(set);
+							break;
+					}
+				});
+
+				line.sets = sets.map(set => {
+					if(set.weights && typeof set.weights !== 'number') {
+						set.weights = Math.max.apply(null, (set.weights instanceof Array ? set.weights : [set.weights]).map(w => {
+							return w.weight || w;
+						}));
+					}
+
+					if(isDropset) {
+						set.type = 'dropset';
+					}
+
+					if(mode) {
+						set.mode = mode[0];
+
+					} else if (set.mode == 'superset') {
+						set.mode = '3х12';
+						
+					}
+
+					// нормализация названия упражнения
+					let exercise = set.name
+						.toLowerCase()
+						.replace(/биц бёдра/, 'биц бедра')
+						.replace(/лёжа гант/, 'гант лёжа')
+						.replace(/лежа/, 'лёжа')
+						.replace(/^биц /, 'бицепс ')
+					;
+
+					if(!exercises[exercise]){
+						exercises[exercise] = 0;
+					}
+					exercises[exercise]++;
+					set.name = exercise;
+
+					return set;
+				});
+
+				return line;
+			})
+//			.slice(157,158)
+//			.filter(i=>i.descr)
 			.forEach((line, number) => {
 				if(!line) {
 					console.log('NOT LINE', line)
@@ -109,11 +188,19 @@ try {
 					let l = line.location;
 					delete line.source;
 					delete line.location;
-					console.log(number.toString().blue, l.start.line.toString().red, s, JSON.stringify((line.sets || ''), null, "\t").yellow)
+
+					//console.log(number.toString().blue, l.start.line.toString().red, s, (line.descr||'').cyan)
+					console.log(number.toString().blue, l.start.line.toString().red, (line.descr||'').cyan)
+					line.sets.forEach((set) => {
+						console.log(JSON.stringify((set || ''), null, "\t").yellow)
+					})
 					console.log();
 				}
 			})
 		;
+
+		;
+		console.log(JSON.stringify((Object.keys(exercises).sort() || ''), null, "\t").red);
 	}
 
 } catch(e) {
