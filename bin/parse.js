@@ -35,7 +35,11 @@ class Workout {
 	} 
 }
 
-let parser = require("pegjs").buildParser(fs.readFileSync('parser.pegjs', 'utf-8'));
+let parser = require("pegjs").buildParser(fs.readFileSync('parser.pegjs', 'utf-8'), {
+	debug: true,
+//	trace: true
+});
+
 let source = fs.readFileSync('data.txt', 'UTF-8') + "\n";
 
 function hr() {
@@ -85,22 +89,27 @@ function showSource(location) {
 let result;
 
 try {
-	result = parser.parse(source, {
-		debug: true,
-	})
+	result = parser.parse(source)
 
 	if(result) {
-		showSource();
+	//	showSource();
 
 		result
-		//	.filter(i => i.caption.descr && typeof i.caption.descr !== 'string')
-			.map(i => i.sets)
+//			.filter(i => i.descr)
+//			.map(i => i.descr)
+//			.sort()
+//			.map(i => i.sets)
+//		.slice(157,158)
 			.forEach((line, number) => {
 				if(!line) {
 					console.log('NOT LINE', line)
 					process.exit()
 				} else {
-					console.log(number.toString().blue, JSON.stringify((line || ''), null, "\t").yellow)
+					let s = line.source;
+					let l = line.location;
+					delete line.source;
+					delete line.location;
+					console.log(number.toString().blue, l.start.line.toString().red, s, JSON.stringify((line.sets || ''), null, "\t").yellow)
 					console.log();
 				}
 			})
