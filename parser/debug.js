@@ -57,7 +57,7 @@ try {
 
 	if(result) {
 		showSource();
-		result.sets
+		result.workouts
 
 //			.slice(157,158)
 //			.filter(i=>i.descr)

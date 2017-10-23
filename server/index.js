@@ -1,11 +1,13 @@
 /* eslint no-console: 0 */
 
+const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const webpack = require('webpack');
 const webpackMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const config = require('./webpack.config.js');
+const parse = require('../parser/lib').parse;
 
 const port = 3000;
 
@@ -31,8 +33,14 @@ app.use(middleware);
 app.use(webpackHotMiddleware(compiler));
 
 app.get('/data', function response(req, res) {
-	res.write('data');
-	res.end();
+	try {
+		let source = fs.readFileSync(__dirname + '/../parser/data.txt', 'UTF-8') + "\n";
+		res.json(parse(source));
+		res.end();
+
+	} catch(e) {
+		res.status(500).json(e);
+	}
 });
 
 app.get('*', function response(req, res) {

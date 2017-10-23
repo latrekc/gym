@@ -34,7 +34,7 @@ exports.parse = function (source){
 
 	let exercises = {};
 
-	let sets = result
+	let workouts = result
 		.map((line, number) => {
 			let isDropset;
 			let mode;
@@ -114,7 +114,7 @@ exports.parse = function (source){
 
 	return {
 		exercises: exercises,
-		sets: sets,
+		workouts: workouts,
 		groups: groups
 	}
 }
