@@ -1,0 +1,12 @@
+.list {
+	padding:  0;
+	width: 25%;
+}
+
+.item {
+	padding: 5px;
+}
+
+.item:hover {
+	background-color: #dedede;
+}

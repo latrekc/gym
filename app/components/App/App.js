@@ -1,14 +1,24 @@
 import React from 'react';
-import styles from './App.css';
+import Exercises from '../Exercises/Exercises'
 
 export default class App extends React.Component {
 	constructor(props) {
 		super(props);
+
 		this.state = {
-			test: 'xxx'
-		};
+			...props
+		}
 	}
+
 	render() {
-		return (<div className={styles.app}>gym</div>);
+		console.log(this)
+		return (
+			<div>
+				<Exercises
+					list={Object.keys(this.state.exercises).sort()}
+					handle
+				/>
+			</div>
+		);
 	}
 }
