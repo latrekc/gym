@@ -11,7 +11,7 @@ export default class App extends React.Component {
 	}
 
 	render() {
-		console.log(this)
+		console.log(this.state)
 		return (
 			<div>
 				<Exercises

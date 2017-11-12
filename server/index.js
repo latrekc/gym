@@ -7,7 +7,7 @@ const webpack = require('webpack');
 const webpackMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const config = require('./webpack.config.js');
-const parse = require('../parser/lib').parse;
+const parse = require('./parser/lib').parse;
 
 const port = 3000;
 
@@ -34,8 +34,7 @@ app.use(webpackHotMiddleware(compiler));
 
 app.get('/data', function response(req, res) {
 	try {
-		let source = fs.readFileSync(__dirname + '/../parser/data.txt', 'UTF-8') + "\n";
-		res.json(parse(source));
+		res.json(parse());
 		res.end();
 
 	} catch(e) {
