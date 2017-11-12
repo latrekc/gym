@@ -150,6 +150,7 @@ exports.parse = function (saveLocation){
 
 	workouts.reverse().forEach((set) => {
 		set.date = getPrevious(set.weekday);
+		delete set.weekday;
 	})
 
 	return {

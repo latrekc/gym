@@ -34,7 +34,7 @@ app.use(webpackHotMiddleware(compiler));
 
 app.get('/data', function response(req, res) {
 	try {
-		res.json(parse());
+		res.json(parse().result);
 		res.end();
 
 	} catch(e) {
