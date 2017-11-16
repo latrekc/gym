@@ -55,11 +55,11 @@ try {
 	}
 
 	if(result) {
-		// showSource();
+		0 && showSource();
 
 		hr();
 		console.log('WORKOUTS')
-		result.workouts
+		0 && result.workouts
 
 //			.slice(157,158)
 //			.filter(i=>i.descr)
@@ -88,10 +88,12 @@ try {
 			console.log(field.toUpperCase());
 			console.log(JSON.stringify((result[field] || []).map(i => i.name), null, "\t"));
 		});
+		
+		console.log(JSON.stringify(result.exercises, null, "\t"))
 	}
 
 } catch(e) {
-	showSource(e.location);
+	0 && showSource(e.location);
 
 	console.error(e.message.red)
 	if(e.location) {

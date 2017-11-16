@@ -7,10 +7,12 @@ import List from './List'
 function App({ groups, modes, exercises, types, onSelect })  {
 	return (
 		<div>
-			<List type="groups" list={groups} onSelect={onSelect} />
+			<List type="groups" list={groups} onSelect={onSelect}>
+				<List type="exercises" list={exercises} onSelect={onSelect} parent="group"/>
+			</List>
+
 			<List type="modes" list={modes} onSelect={onSelect} />
 			<List type="types" list={types} onSelect={onSelect} />
-			<List type="exercises" list={exercises} onSelect={onSelect} />
 		</div>
 	);
 }

@@ -15,6 +15,12 @@ function addDict(dict) {
 	}
 }
 
+function find(list, name) {
+	if(name) {
+		return list.find(i => i.name === name);
+	}
+}
+
 let groups = [];
 ['грудь', 'спина', 'ноги',  'плечи', 'бицепс', 'трицепс', 'пресс'].forEach(addDict(groups));
 
@@ -35,11 +41,19 @@ exports.parse = function (saveLocation){
 
 	let addType = addDict(types);
 	let addMode = addDict(modes);
-	let addExercise = (function(normalize) {
+	let addExercise = (function(normalize, chooseGroup) {
 		let _add = addDict(exercises);
 
 		return function(name) {
-			return _add(normalize(name))
+			name = normalize(name);
+			let id = _add(name);
+			let group = find(groups, chooseGroup(name));
+
+			if(group) {
+				find(exercises, name).group = group.id;
+			}
+
+			return id;
 		}
 
 	})((name) => {
@@ -47,12 +61,45 @@ exports.parse = function (saveLocation){
 			.toLowerCase()
 			.replace(/биц бёдра/, 'биц бедра')
 			.replace(/лёжа гант/, 'гант лёжа')
+			.replace(/ узу /, ' узк ')
 			.replace(/лежа/, 'лёжа')
 			.replace(/^биц /, 'бицепс ')
 			.replace(/^триц /, 'трицепс ')
 			.replace(/^сгибан /, 'сгибание ')
 			.replace(/\s+[х0-9]+$/, '')
 		;
+	}, (name) => {
+		function _() {
+			return Array.prototype.some.call(arguments, (type) => {
+				return !!name.match(type);
+			});
+		}
+
+		switch(true) {
+			case _('бок', 'планка', 'скруч', 'пресс'):
+				return 'пресс';
+
+			case _('выпады', 'бедра', 'ногами', 'присед', 'разгиб', 'сгибание'): 
+				return 'ноги';
+
+			case _('жим из за головы', 'трицепс'):
+				return 'трицепс';
+
+			case _('арни', 'плечи', 'подбородку', 'махи'):
+				return 'плечи';
+
+			case _('тяга', 'тяги', 'гиперэкстензия', 'горизонт', 'становая'):
+				return 'спина';
+
+			case _('бицепс'):
+				return 'бицепс';
+
+			case _('пулловер', 'жим', 'бабочка', 'кроссовер', 'разводка'):
+				return 'грудь';
+
+			default:
+				throw new Error('Undefined group: ', name);
+		}
 	})
 
 	let workouts = parser.parse(source)
@@ -156,8 +203,8 @@ exports.parse = function (saveLocation){
 	return {
 		source,
 		result: {
-			workouts: workouts.reverse(),
 			exercises: exercises,
+			workouts: workouts.reverse(),
 			types: types,
 			modes: modes,
 			groups: groups
