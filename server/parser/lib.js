@@ -72,27 +72,27 @@ exports.parse = function (saveLocation){
 				switch(true) {
 					case set.hasOwnProperty('circle'):
 						set.circle.forEach(subset => {
-							subset.type = addType('circle');
+							subset.type = addType('круги');
 							sets.push(subset);
 						});
 						break;
 
 					case set.hasOwnProperty('triset'):
 						set.triset.forEach(subset => {
-							subset.type = addType('triset');
+							subset.type = addType('трисет');
 							sets.push(subset);
 						});
 						break;
 
 					case set.hasOwnProperty('superset'):
 						set.superset.forEach(subset => {
-							subset.type = addType('superset');
+							subset.type = addType('суперсет');
 							sets.push(subset);
 						});
 						break;
 
 					default:
-						set.type = addType('simple');
+						set.type = addType('сет');
 						sets.push(set);
 						break;
 				}
@@ -109,7 +109,7 @@ exports.parse = function (saveLocation){
 					}
 
 					if(isDropset) {
-						set.type = addType('dropset');
+						set.type = addType('дропсет');
 					}
 
 					if(mode) {
