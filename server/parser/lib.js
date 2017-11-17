@@ -15,9 +15,9 @@ function addDict(dict) {
 	}
 }
 
-function find(list, name) {
-	if(name) {
-		return list.find(i => i.name === name);
+function find(list, value, field='name') {
+	if(value) {
+		return list.find(i => i[field] === value);
 	}
 }
 
@@ -50,7 +50,13 @@ exports.parse = function (saveLocation){
 			let group = find(groups, chooseGroup(name));
 
 			if(group) {
-				find(exercises, name).group = group.id;
+				if(!group.exercises) {
+					group.exercises = [];
+				}
+
+				if(!group.exercises.includes(id)) {
+					group.exercises.push(id);
+				}
 			}
 
 			return id;
@@ -165,6 +171,16 @@ exports.parse = function (saveLocation){
 					} else if (set.mode == 'superset') {
 						set.mode = addMode('3х12');
 				
+					}
+
+					if(set.mode) {
+						let type = find(types, set.type, 'id');
+						if(!type.modes) {
+							type.modes = [];
+						}
+						if(!type.modes.includes(set.mode)) {
+							type.modes.push(set.mode)
+						}
 					}
 
 					set.exercise = addExercise(set.name)

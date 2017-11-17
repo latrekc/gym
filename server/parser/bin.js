@@ -83,13 +83,20 @@ try {
 			})
 		;
 
+		0 && result.workouts.reduce((res, cur) => {
+			return res.concat(cur.sets.map(i => {
+				return { type: i.type, mode: i.mode};
+			}));
+		}, []).forEach((o) => console.log(JSON.stringify(o)));
+
 		0 && ['types', 'modes', 'exercises', 'groups'].forEach(field => {
 			hr();
 			console.log(field.toUpperCase());
 			console.log(JSON.stringify((result[field] || []).map(i => i.name), null, "\t"));
 		});
-		
-		console.log(JSON.stringify(result.exercises, null, "\t"))
+
+		console.log(JSON.stringify(result.groups, null, "\t"))
+		console.log(JSON.stringify(result.types, null, "\t"))
 	}
 
 } catch(e) {

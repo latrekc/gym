@@ -1,13 +1,13 @@
 import React from 'react';
 
 export default function List({ list, type, onSelect, children })  {
-	const childrenFiltered = (id) => {
+	const childrenFiltered = (parent) => {
 		if(children) {
 			return React.Children.map(children, child => {
-				return React.cloneElement(child, {
+				return parent[child.props.type] && React.cloneElement(child, {
 					...child.props,
 					list: child.props.list.filter(grandChild => {
-						return grandChild[child.props.parent] === id;
+						return parent[child.props.type].includes(grandChild.id);
 					})
 				});
 			});
@@ -22,7 +22,7 @@ export default function List({ list, type, onSelect, children })  {
 						<input type="checkbox" checked={item.selected} />
 						{item.name}
 
-						{childrenFiltered(item.id)}
+						{childrenFiltered(item)}
 					</div>
 				);
 			})}
