@@ -4,7 +4,7 @@ function addDict(dict) {
 	let keys = {};
 
 	return function(name) {
-		if(!keys[name]) {
+		if (!keys[name]) {
 			let id = dict.length + 1;
 			dict.push({ name, id})
 			keys[name] = id;
@@ -16,7 +16,7 @@ function addDict(dict) {
 }
 
 function find(list, value, field='name') {
-	if(value) {
+	if (value) {
 		return list.find(i => i[field] === value);
 	}
 }
@@ -49,12 +49,12 @@ exports.parse = function (saveLocation){
 			let id = _add(name);
 			let group = find(groups, chooseGroup(name));
 
-			if(group) {
-				if(!group.exercises) {
+			if (group) {
+				if (!group.exercises) {
 					group.exercises = [];
 				}
 
-				if(!group.exercises.includes(id)) {
+				if (!group.exercises.includes(id)) {
 					group.exercises.push(id);
 				}
 			}
@@ -114,7 +114,7 @@ exports.parse = function (saveLocation){
 			let mode;
 
 			// режим тренировки
-			if(line.descr) {
+			if (line.descr) {
 				isDropset = line.descr.toLowerCase().match(/дроп сет/) !== null;
 				mode = line.descr.match(/\d+[хx]\d+/g);
 			}
@@ -155,17 +155,17 @@ exports.parse = function (saveLocation){
 				weekday: line.weekday,
 				descr: line.descr,
 				sets: sets.map(set => {
-					if(set.weights && typeof set.weights !== 'number') {
+					if (set.weights && typeof set.weights !== 'number') {
 						set.weights = Math.max.apply(null, (set.weights instanceof Array ? set.weights : [set.weights]).map(w => {
 							return w.weight || w;
 						}));
 					}
 
-					if(isDropset) {
+					if (isDropset) {
 						set.type = addType('дропсет');
 					}
 
-					if(mode) {
+					if (mode) {
 						set.mode = addMode(mode[0]);
 
 					} else if (set.mode == 'superset') {
@@ -173,24 +173,24 @@ exports.parse = function (saveLocation){
 				
 					}
 
-					if(set.mode) {
-						let type = find(types, set.type, 'id');
-						if(!type.modes) {
-							type.modes = [];
-						}
-						if(!type.modes.includes(set.mode)) {
-							type.modes.push(set.mode)
-						}
+					set.exercise = addExercise(set.name);
+
+					let exercise = find(exercises, set.exercise, 'id');
+					if (!exercise.typemodes) {
+						exercise.typemodes = [];
+					}
+					let typemode = `${set.type}${set.mode ? ';' : ''}${set.mode||''}`;
+					if (!exercise.typemodes.includes(typemode)) {
+						exercise.typemodes.push(typemode);
 					}
 
-					set.exercise = addExercise(set.name)
 					delete set.name;
 
 					return set;
 				})
 			};
 
-			if(saveLocation) {
+			if (saveLocation) {
 				result.source = line.source;
 				result.location = line.location;
 			}

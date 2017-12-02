@@ -1,44 +1,73 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { toggleSelected } from '../actions'
+import { toggleFilter } from '../actions'
 
-import List from './List'
+import GroupsList from './GroupsList'
+import ExercisesList from './ExercisesList'
+import SelectableList from './SelectableList'
 
-function App({ groups, modes, exercises, types, onSelect })  {
+function App({ groups, exercises, typemodes, filters, onSelect })  {
 	return (
 		<div>
-			<List type="groups" list={groups} onSelect={onSelect}>
-				<List type="exercises" list={exercises} onSelect={onSelect}/>
-			</List>
-
-			<List type="types" list={types} onSelect={onSelect}>
-				<List type="modes" list={modes} onSelect={onSelect} />
-			</List>
+			<GroupsList list={groups} filterChildren={filterChildren.bind(null, 'groups', 'exercises')}>
+				<ExercisesList list={exercises} filterChildren={filterChildren.bind(null, 'exercises', 'typemodes')}>
+					<SelectableList list={typemodes} onSelect={onSelect} filters={filters} />
+				</ExercisesList>
+			</GroupsList>
 		</div>
 	);
 }
 
+const filterChildren = (parentType, type, parent, children ) => {
+	if (children) {
+		return React.Children.map(children, child => {
+			return parent[type] && React.cloneElement(child, {
+				...child.props,
+				[parentType]: parent.id,
+				list: child.props.list.filter(grandChild => {
+					return parent[type].includes(grandChild.id);
+				})
+			});
+		});
+	}
+}
 
-const getCheckedList = (state, type) => {
-	return state.dicts[type].map(item => {
-		item.selected = state.selected[type].includes(item.id)
-		return item;
-	})
-} 
+const getTypemodes = (state) => {
+	let result = [];
+
+	state.dicts.types.forEach(type => {
+		result.push({
+			id: `${type.id}`,
+			name: `${type.name}`,
+			type: `${type.id}`
+		});
+
+		state.dicts.modes.forEach(mode => {
+			result.push({
+				id: `${type.id};${mode.id}`,
+				name: `${type.name} ${mode.name}`,
+				type: `${type.id}`,
+				mode: `${mode.id}`
+			});
+		});
+	});
+
+	return result;
+}
 
 const mapStateToProps = state => {
 	return {
-		groups: getCheckedList(state, 'groups'),
-		modes: getCheckedList(state, 'modes'),
-		types: getCheckedList(state, 'types'),
-		exercises: getCheckedList(state, 'exercises')
+		groups: state.dicts.groups,
+		exercises: state.dicts.exercises,
+		typemodes: getTypemodes(state),
+		filters: state.filters
 	}
 }
 
 const mapDispatchToProps = dispatch => {
 	return {
-		onSelect: (type, id) => {
-			dispatch(toggleSelected(type, id))
+		onSelect: (filter) => {
+			dispatch(toggleFilter(filter))
 		}
 	}
 }

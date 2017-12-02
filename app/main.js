@@ -8,12 +8,7 @@ import App from './components/App'
 fetch('/data').then((response) => response.json()).then((dicts) => {
 	let store = createStore(dictsApp, {
 		dicts,
-		selected: {
-			groups:[],
-			types: [],
-			exercises: [],
-			modes: []
-		}
+		filters: []
 	});
 
 	render(

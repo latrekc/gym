@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
 import dicts from './dicts'
-import selected from './selected'
+import filters from './filters'
 
 const dictsApp = combineReducers({
 	dicts,
-	selected
+	filters
 })
 
 export default dictsApp

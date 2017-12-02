@@ -1,10 +1,6 @@
-export const toggleSelected = (type, id) => {
+export const toggleFilter = (filter) => {
 	return {
-		type: 'TOGGLE_SELECTED',
-
-		item: {
-			type,
-			id
-		}
+		type: 'TOGGLE_FILTER',
+		filter
 	}
 }
