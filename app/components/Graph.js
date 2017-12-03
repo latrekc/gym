@@ -1,7 +1,7 @@
 import React from 'react';
 import AmCharts from '@amcharts/amcharts3-react';
 
-export default function Workouts({ logs, exercises, typemodes })  {
+export default function Graph({ logs, exercises, typemodes })  {
 	const findName = (id, dict) => {
 		return dict.find(item => item.id == id).name;
 	}
@@ -19,6 +19,7 @@ export default function Workouts({ logs, exercises, typemodes })  {
 	let graphs = logs.types.map(filter => {
 		return {
 			id: filter,
+			balloonText: '<b>[[title]]</b><br>[[category]]: <b>[[value]]</b>',
 			bullet:'circle',
 			title: getTitle(filter),
 			valueField: filter
@@ -26,10 +27,8 @@ export default function Workouts({ logs, exercises, typemodes })  {
 	});
 
 	let style = {
-		width: "60%",
-		height: "100%",
-		position: "fixed",
-		right: 0
+		width: "100%",
+		height: "500px"
 	};
 
 	let config = {

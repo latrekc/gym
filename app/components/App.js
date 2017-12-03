@@ -4,12 +4,12 @@ import { toggleFilter } from '../actions'
 
 import Groups from './Groups'
 import Exercises from './Exercises'
-import Workouts from './Workouts'
+import Graph from './Graph'
 
 function App({ groups, exercises, typemodes, filters, logs, onSelect })  {
 	return (
 		<div>
-			<Workouts logs={logs} exercises={exercises} typemodes={typemodes} />
+			<Graph logs={logs} exercises={exercises} typemodes={typemodes} />
 
 			<Groups list={groups} filterChildren={filterChildren}>
 				<Exercises list={exercises} onSelect={onSelect} filters={filters} />
