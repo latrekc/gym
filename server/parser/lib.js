@@ -63,6 +63,10 @@ exports.parse = function (saveLocation){
 		}
 
 	})((name) => {
+		if (!name) {
+			debugger;
+			
+		}
 		return name
 			.toLowerCase()
 			.replace(/биц бёдра/, 'биц бедра')
@@ -177,9 +181,6 @@ exports.parse = function (saveLocation){
 
 					} else if (set.type == find(types, 'сет').id) {
 						set.mode = addMode('3х8');
-				
-					} else {
-						console.log(set.type, find(types, 'суперсет'));
 					}
 
 					set.exercise = addExercise(set.name);
