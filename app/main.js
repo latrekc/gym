@@ -5,9 +5,10 @@ import { createStore } from 'redux'
 import dictsApp from './reducers'
 import App from './components/App'
 
-fetch('/data').then((response) => response.json()).then((dicts) => {
+fetch('/data').then((response) => response.json()).then(({dicts, workouts}) => {
 	let store = createStore(dictsApp, {
 		dicts,
+		workouts,
 		filters: []
 	});
 

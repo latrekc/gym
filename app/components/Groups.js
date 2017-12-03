@@ -1,14 +1,14 @@
 import React from 'react';
 
-export default function GroupsList({ list, filterChildren, children })  {
+export default function Groups({ list, filterChildren, children })  {
 	return (
-		<div style={{ margin: '10px' }}>
+		<div style={{ width: '40%', position: 'fixed', height: '100%', overflowY: 'scroll' }}>
 			{list.map((item) => {
 				return (
 					<div key={item.id} style={{ padding: '5px 10px'}}>
 						<span style={{ fontWeight: 'bold'}}>{item.name}</span>
 
-						{filterChildren(item, children)}
+						{filterChildren('groups', 'exercises', item, children)}
 					</div>
 				);
 			})}

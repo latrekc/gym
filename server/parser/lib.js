@@ -160,6 +160,10 @@ exports.parse = function (saveLocation){
 							return w.weight || w;
 						}));
 					}
+					
+					if (!set.weights) {
+						set.weights = 0;
+					}
 
 					if (isDropset) {
 						set.type = addType('дропсет');
@@ -204,11 +208,17 @@ exports.parse = function (saveLocation){
 			lastDay.setDate(lastDay.getDate() - 1);
 		}
 
-		let result = lastDay.toString();
+		let result = lastDay;
 
 		lastDay.setDate(lastDay.getDate() - 1);
 
-		return result;
+		return result.valueOf();
+/*
+		let month = result.getMonth();
+		let day = result.getDate();
+
+		return `${result.getFullYear()}-${month > 9 ? month : '0' + month}-${day > 9 ? day : '0' + day}`;
+*/
 	}
 
 	workouts.reverse().forEach((set) => {
@@ -219,11 +229,13 @@ exports.parse = function (saveLocation){
 	return {
 		source,
 		result: {
-			exercises: exercises,
 			workouts: workouts.reverse(),
-			types: types,
-			modes: modes,
-			groups: groups
+			dicts: {
+				exercises,
+				types,
+				modes,
+				groups
+			}
 		}
 	}
 }
