@@ -4,18 +4,15 @@ import { toggleFilter } from '../actions'
 
 import Groups from './Groups'
 import Exercises from './Exercises'
-import SelectableList from './SelectableList'
 import Workouts from './Workouts'
 
 function App({ groups, exercises, typemodes, filters, logs, onSelect })  {
 	return (
 		<div>
-			<Workouts logs={logs} exercises={exercises} typemodes={typemodes} filters={filters}/>
+			<Workouts logs={logs} exercises={exercises} typemodes={typemodes} />
 
 			<Groups list={groups} filterChildren={filterChildren}>
-				<Exercises list={exercises} filterChildren={filterChildren}>
-					<SelectableList list={typemodes} onSelect={onSelect} filters={filters} />
-				</Exercises>
+				<Exercises list={exercises} onSelect={onSelect} filters={filters} />
 			</Groups>
 		</div>
 	);
@@ -71,20 +68,27 @@ const getTypemodes = (types, modes) => {
 }
 
 const getLogs = (workouts, filters) => {
-	let logs = [];
+	let result = {
+		data: [],
+		types: []
+	};
 
 	workouts.forEach(workout => {
 		let log;
 
 		workout.sets.forEach(item => {
-			let key = [item.exercise, item.type, item.mode].join(';');
+			if (filters.exercises == item.exercise) {
+				let key = [item.exercise, item.type, item.mode].join(';');
 
-			if (filters.includes(key)) {
 				if (!log) {
 					log = {};
 				}
 
 				log[key] = item.weights;
+
+				if (!result.types.includes(key)) {
+					result.types.push(key);
+				}
 			}
 		});
 
@@ -92,11 +96,11 @@ const getLogs = (workouts, filters) => {
 			log.date = workout.date;
 			log.descr = workout.descr;
 
-			logs.push(log);
+			result.data.push(log);
 		}
 	});
 
-	return logs;
+	return result;
 }
 
 const mapStateToProps = state => {
