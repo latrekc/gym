@@ -172,9 +172,14 @@ exports.parse = function (saveLocation){
 					if (mode) {
 						set.mode = addMode(mode[0]);
 
-					} else if (set.mode == 'superset') {
+					} else if (set.type == find(types, 'суперсет').id) {
 						set.mode = addMode('3х12');
+
+					} else if (set.type == find(types, 'сет').id) {
+						set.mode = addMode('3х8');
 				
+					} else {
+						console.log(set.type, find(types, 'суперсет'));
 					}
 
 					set.exercise = addExercise(set.name);

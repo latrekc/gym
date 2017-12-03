@@ -9,7 +9,6 @@ export default function Workouts({ logs, exercises, typemodes, filters })  {
 	const getTitle = (filter) => {
 		let ids = filter.split(/;/).filter(id => id);
 
-
 		return [
 			findName(ids.shift(), exercises),
 			findName(ids.join(';'), typemodes)

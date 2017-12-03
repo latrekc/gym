@@ -46,9 +46,21 @@ const getTypemodes = (types, modes) => {
 		});
 
 		modes.forEach(mode => {
+			let name;
+
+			switch (type.name) {
+				case 'сет':
+					name = '';
+					break;
+
+				default:
+					name = `(${type.name})`;
+					break;
+			}
+
 			result.push({
 				id: `${type.id};${mode.id}`,
-				name: `${type.name} ${mode.name}`,
+				name: `${mode.name}${name}`,
 				type: `${type.id}`,
 				mode: `${mode.id}`
 			});
