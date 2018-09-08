@@ -5,11 +5,15 @@ import { toggleFilter } from '../actions'
 import Groups from './Groups'
 import Exercises from './Exercises'
 import Graph from './Graph'
+import Workouts from './Workouts'
 
 function App({ groups, exercises, typemodes, filters, logs, onSelect })  {
 	return (
 		<div>
-			<Graph logs={logs} exercises={exercises} typemodes={typemodes} />
+			<div style={{ position: 'fixed', width: '80%', height: '100%', top: 0, right: 0}}>
+				<Graph logs={logs} exercises={exercises} typemodes={typemodes} />
+				<Workouts logs={logs} exercises={exercises} typemodes={typemodes} />
+			</div>
 
 			<Groups list={groups} filterChildren={filterChildren}>
 				<Exercises list={exercises} onSelect={onSelect} filters={filters} />
