@@ -100,13 +100,12 @@ try {
 	}
 
 } catch(e) {
-	0 && showSource(e.location);
+	showSource(e.location);
 
 	console.error(e.message.red)
 	if(e.location) {
 		console.error(JSON.stringify(e.location, null, "\t").red)
 	}
-	process.exit()
 }
 
 console.log()

@@ -5,7 +5,7 @@
 	"private": true,
 	"scripts": {
 		"start": "node server",
-		"parse": "node server/parser/bin"
+		"parse": "node --inspect-brk server/parser/bin"
 	},
 	"dependencies": {
 		"babel-cli": "^6.4.0",
