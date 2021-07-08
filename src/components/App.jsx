@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { toggleFilter } from '../actions'
 
-import Groups from './Groups'
-import Exercises from './Exercises'
-import Graph from './Graph'
-import Workouts from './Workouts'
+import Groups from './Groups.jsx'
+import Exercises from './Exercises.jsx'
+import Graph from './Graph.jsx'
+import Workouts from './Workouts.jsx'
 
 function App({ groups, exercises, typemodes, filters, logs, onSelect })  {
 	return (
